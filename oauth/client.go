@@ -8,7 +8,7 @@ import (
 	"github.com/RichardKnop/go-oauth2-server/models"
 	"github.com/RichardKnop/go-oauth2-server/util"
 	"github.com/RichardKnop/go-oauth2-server/util/password"
-	"github.com/RichardKnop/uuid"
+	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
 )
 
@@ -82,7 +82,7 @@ func (s *Service) createClientCommon(db *gorm.DB, clientID, secret, redirectURI 
 
 	client := &models.OauthClient{
 		MyGormModel: models.MyGormModel{
-			ID:        uuid.New(),
+			ID:        uuid.New().String(),
 			CreatedAt: time.Now().UTC(),
 		},
 		Key:         strings.ToLower(clientID),

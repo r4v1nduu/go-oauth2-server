@@ -1,10 +1,7 @@
 package config
 
 import (
-	"os"
 	"time"
-
-	"github.com/RichardKnop/go-oauth2-server/log"
 )
 
 var (
@@ -19,10 +16,10 @@ var (
 var Cnf = &Config{
 	Database: DatabaseConfig{
 		Type:         "postgres",
-		Host:         "postgres",
+		Host:         "localhost",
 		Port:         5432,
 		User:         "go_oauth2_server",
-		Password:     "",
+		Password:     "password",
 		DatabaseName: "go_oauth2_server",
 		MaxIdleConns: 5,
 		MaxOpenConns: 5,
@@ -41,68 +38,15 @@ var Cnf = &Config{
 	IsDevelopment: true,
 }
 
-// NewConfig loads configuration from etcd and returns *Config struct
-// It also starts a goroutine in the background to keep config up-to-date
+// NewConfig creates a configuration - simplified version for library use
 func NewConfig(mustLoadOnce bool, keepReloading bool, backendType string) *Config {
-	if configLoaded {
-		return Cnf
-	}
-
-	var backend Backend
-
-	switch backendType {
-	case "etcd":
-		backend = new(etcdBackend)
-	case "consul":
-		backend = new(consulBackend)
-	default:
-		log.FATAL.Printf("%s is not a valid backend", backendType)
-		os.Exit(1)
-	}
-
-	backend.InitConfigBackend()
-
-	// If the config must be loaded once successfully
-	if mustLoadOnce && !configLoaded {
-		// Read from remote config the first time
-		newCnf, err := backend.LoadConfig()
-
-		if err != nil {
-			log.FATAL.Print(err)
-			os.Exit(1)
-		}
-
-		// Refresh the config
-		backend.RefreshConfig(newCnf)
-
-		// Set configLoaded to true
-		configLoaded = true
-		log.INFO.Print("Successfully loaded config for the first time")
-	}
-
-	if keepReloading {
-		// Open a goroutine to watch remote changes forever
-		go func() {
-			for {
-				// Delay after each request
-				<-time.After(reloadDelay)
-
-				// Attempt to reload the config
-				newCnf, err := backend.LoadConfig()
-				if err != nil {
-					log.ERROR.Print(err)
-					continue
-				}
-
-				// Refresh the config
-				backend.RefreshConfig(newCnf)
-
-				// Set configLoaded to true
-				configLoaded = true
-				log.INFO.Print("Successfully reloaded config")
-			}
-		}()
-	}
-
+	// For library use, we only support simple configuration
+	configLoaded = true
 	return Cnf
+}
+
+// SetConfig allows setting configuration directly for library use
+func SetConfig(config *Config) {
+	Cnf = config
+	configLoaded = true
 }

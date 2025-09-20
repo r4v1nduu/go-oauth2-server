@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/RichardKnop/go-oauth2-server/util"
-	"github.com/RichardKnop/uuid"
+	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
 )
 
@@ -117,11 +117,11 @@ func (ac *OauthAuthorizationCode) TableName() string {
 func NewOauthRefreshToken(client *OauthClient, user *OauthUser, expiresIn int, scope string) *OauthRefreshToken {
 	refreshToken := &OauthRefreshToken{
 		MyGormModel: MyGormModel{
-			ID:        uuid.New(),
+			ID:        uuid.New().String(),
 			CreatedAt: time.Now().UTC(),
 		},
 		ClientID:  util.StringOrNull(string(client.ID)),
-		Token:     uuid.New(),
+		Token:     uuid.New().String(),
 		ExpiresAt: time.Now().UTC().Add(time.Duration(expiresIn) * time.Second),
 		Scope:     scope,
 	}
@@ -135,11 +135,11 @@ func NewOauthRefreshToken(client *OauthClient, user *OauthUser, expiresIn int, s
 func NewOauthAccessToken(client *OauthClient, user *OauthUser, expiresIn int, scope string) *OauthAccessToken {
 	accessToken := &OauthAccessToken{
 		MyGormModel: MyGormModel{
-			ID:        uuid.New(),
+			ID:        uuid.New().String(),
 			CreatedAt: time.Now().UTC(),
 		},
 		ClientID:  util.StringOrNull(string(client.ID)),
-		Token:     uuid.New(),
+		Token:     uuid.New().String(),
 		ExpiresAt: time.Now().UTC().Add(time.Duration(expiresIn) * time.Second),
 		Scope:     scope,
 	}
@@ -153,12 +153,12 @@ func NewOauthAccessToken(client *OauthClient, user *OauthUser, expiresIn int, sc
 func NewOauthAuthorizationCode(client *OauthClient, user *OauthUser, expiresIn int, redirectURI, scope string) *OauthAuthorizationCode {
 	return &OauthAuthorizationCode{
 		MyGormModel: MyGormModel{
-			ID:        uuid.New(),
+			ID:        uuid.New().String(),
 			CreatedAt: time.Now().UTC(),
 		},
 		ClientID:    util.StringOrNull(string(client.ID)),
 		UserID:      util.StringOrNull(string(user.ID)),
-		Code:        uuid.New(),
+		Code:        uuid.New().String(),
 		ExpiresAt:   time.Now().UTC().Add(time.Duration(expiresIn) * time.Second),
 		RedirectURI: util.StringOrNull(redirectURI),
 		Scope:       scope,

@@ -9,7 +9,7 @@ import (
 	"github.com/RichardKnop/go-oauth2-server/models"
 	"github.com/RichardKnop/go-oauth2-server/util"
 	pass "github.com/RichardKnop/go-oauth2-server/util/password"
-	"github.com/RichardKnop/uuid"
+	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
 )
 
@@ -114,7 +114,7 @@ func (s *Service) createUserCommon(db *gorm.DB, roleID, username, password strin
 	// Start with a user without a password
 	user := &models.OauthUser{
 		MyGormModel: models.MyGormModel{
-			ID:        uuid.New(),
+			ID:        uuid.New().String(),
 			CreatedAt: time.Now().UTC(),
 		},
 		RoleID:   util.StringOrNull(roleID),

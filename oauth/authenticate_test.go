@@ -5,7 +5,6 @@ import (
 
 	"github.com/RichardKnop/go-oauth2-server/models"
 	"github.com/RichardKnop/go-oauth2-server/oauth"
-	"github.com/RichardKnop/go-oauth2-server/session"
 	"github.com/RichardKnop/uuid"
 	"github.com/jinzhu/gorm"
 	"github.com/stretchr/testify/assert"
